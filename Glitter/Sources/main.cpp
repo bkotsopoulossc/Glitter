@@ -9,40 +9,55 @@
 #include <cstdio>
 #include <cstdlib>
 
-int main(int argc, char * argv[]) {
+#include <iostream>
+#include <string>
 
-    // Load GLFW and Create a Window
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    auto mWindow = glfwCreateWindow(mWidth, mHeight, "OpenGL", nullptr, nullptr);
+// Define Some Constants
+const int mWidth = 1280;
+const int mHeight = 800;
 
-    // Check for Valid Context
-    if (mWindow == nullptr) {
-        fprintf(stderr, "Failed to Create OpenGL Context");
-        return EXIT_FAILURE;
-    }
+void processInput(GLFWwindow* window) {
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    glfwSetWindowShouldClose(window, true);
+  }
+}
 
-    // Create Context and Load OpenGL Functions
-    glfwMakeContextCurrent(mWindow);
-    gladLoadGL();
-    fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
+int main() {
 
-    // Rendering Loop
-    while (glfwWindowShouldClose(mWindow) == false) {
-        if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(mWindow, true);
+  // Load GLFW and Create a Window
+  glfwInit();
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+  auto mWindow = glfwCreateWindow(mWidth, mHeight, "OpenGL", nullptr, nullptr);
 
-        // Background Fill Color
-        glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+  // Check for Valid Context
+  if (mWindow == nullptr) {
+      fprintf(stderr, "Failed to Create OpenGL Context");
+      return EXIT_FAILURE;
+  }
 
-        // Flip Buffers and Draw
-        glfwSwapBuffers(mWindow);
-        glfwPollEvents();
-    }   glfwTerminate();
-    return EXIT_SUCCESS;
+  // Create Context and Load OpenGL Functions
+  glfwMakeContextCurrent(mWindow);
+  gladLoadGL();
+  fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
+
+  // Rendering Loop
+  while (glfwWindowShouldClose(mWindow) == false) {
+    processInput(mWindow);
+
+    // Background Fill Color
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Flip Buffers and Draw
+    glfwSwapBuffers(mWindow);
+    glfwPollEvents();
+  }
+
+  glfwTerminate();
+
+  return EXIT_SUCCESS;
 }
