@@ -12,7 +12,6 @@
 #include <iostream>
 #include <string>
 
-// Define Some Constants
 const int mWidth = 1280;
 const int mHeight = 800;
 
@@ -22,8 +21,6 @@ void processInput(GLFWwindow* window) {
   }
 }
 
-// set up vertex data (and buffer(s)) and configure vertex attributes
-// ------------------------------------------------------------------
 float vertices[] = {
    0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top right
    0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom right
@@ -36,9 +33,9 @@ float vertices[] = {
 };
 const int vertexAttribStride = 5 * sizeof(float);
 
-unsigned int indices[] = {  // note that we start from 0!
-  0, 1, 3,  // first Triangle
-  1, 2, 3,   // second Triangle
+unsigned int indices[] = {
+  0, 1, 3,
+  1, 2, 3,
   0, 1, 4,
   1, 4, 5,
   1, 2, 5,
@@ -100,7 +97,7 @@ int setupShaders() {
     std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
   }
 
-  // fragment shader
+  // Fragment shader
   int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
   const char* fragmentShaderSource = fragmentShaderSourceStr.data();
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
@@ -136,6 +133,7 @@ void setupVertexData(unsigned int* VBO, unsigned int* VAO, unsigned int* EBO) {
   glGenVertexArrays(1, VAO);
   glGenBuffers(1, VBO);
   glGenBuffers(1, EBO);
+
   // bind the Vertex Array Object first, then bind and set vertex buffer(s),
   // and then configure vertex attributes(s).
   glBindVertexArray(*VAO);
@@ -161,19 +159,12 @@ void setupVertexData(unsigned int* VBO, unsigned int* VAO, unsigned int* EBO) {
     glEnableVertexAttribArray(vertexAttribIndex);
   }
 
-  // note that this is allowed, the call to glVertexAttribPointer registered
-  // VBO as the vertex attribute's bound vertex buffer object so afterwards we
-  // can safely unbind
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   // remember: do NOT unbind the EBO while a VAO is active as the bound element
   // buffer object IS stored in the VAO; keep the EBO bound.
   //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-  // You can unbind the VAO afterwards so other VAO calls won't accidentally
-  // modify this VAO, but this rarely happens. Modifying other VAOs requires
-  // a call to glBindVertexArray anyways so we generally don't unbind VAOs
-  // (nor VBOs) when it's not directly necessary.
   glBindVertexArray(0);
 }
 
